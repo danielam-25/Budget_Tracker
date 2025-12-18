@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simple Budget App</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      padding: 20px;
+    }
+
+    .app {
+      max-width: 500px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .summary {
+      margin-top: 20px;
+    }
+
+    .summary p {
+      font-weight: bold;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      display: flex;
+      justify-content: space-between;
+      background: #eee;
+      padding: 8px;
+      margin-top: 5px;
+    }
+
+    .income {
+      color: green;
+    }
+
+    .expense {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <h1>Budget App</h1>
+
+    <!-- Input Section -->
+    <select id="type">
+      <option value="income">Income</option>
+      <option value="expense">Expense</option>
+    </select>
+
+    <input type="number" id="amount" placeholder="Amount" />
+    <input type="text" id="description" placeholder="Description" />
+    <button onclick="addTransaction()">Add</button>
+
+    <!-- Summary Section -->
+    <div class="summary">
+      <p>Total Income: $<span id="income">0</span></p>
+      <p>Total Expenses: $<span id="expenses">0</span></p>
+      <p>Remaining: $<span id="balance">0</span></p>
+    </div>
+
+    <!-- List Section -->
+    <ul id="list"></ul>
+  </div>
+
+  <script>
+    let totalIncome = 0;
+    let totalExpenses = 0;
+
+    function addTransaction() {
+      const type = document.getElementById("type").value;
+      const amount = Number(document.getElementById("amount").value);
+      const description = document.getElementById("description").value;
+
+      if (amount <= 0 || description === "") {
+        alert("Please enter a valid amount and description");
+        return;
+      }
+
+      const list = document.getElementById("list");
+      const item = document.createElement("li");
+
+      if (type === "income") {
+        totalIncome += amount;
+        item.classList.add("income");
+        item.innerHTML = `<span>${description}</span><span>+$${amount}</span>`;
+      } else {
+        totalExpenses += amount;
+        item.classList.add("expense");
+        item.innerHTML = `<span>${description}</span><span>-$${amount}</span>`;
+      }
+
+      list.appendChild(item);
+
+      updateSummary();
+
+      document.getElementById("amount").value = "";
+      document.getElementById("description").value = "";
+    }
+
+    function updateSummary() {
+      document.getElementById("income").textContent = totalIncome;
+      document.getElementById("expenses").textContent = totalExpenses;
+      document.getElementById("balance").textContent = totalIncome - totalExpenses;
+    }
+  </script>
+</body>
+</html>
+
